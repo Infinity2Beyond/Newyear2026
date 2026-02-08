@@ -2,21 +2,17 @@ document.addEventListener("DOMContentLoaded", function () {
     // ============================================================
     // 1. KHỞI TẠO CÁC BIẾN & ELEMENT
     // ============================================================
-    
-    // Element Thiệp & Hiệu ứng
     const modal = document.querySelector('.js-modal');
     const btnOpenCard = document.querySelector('.open');
     const btnCloseCard = document.querySelector('.close');
     const cardPkg = document.querySelector('.card-packaging');
     const audioMain = document.getElementById("AudioMain");
 
-    // Canvas
     const canvasBg = document.getElementById("canvas");
     const ctxBg = canvasBg.getContext("2d");
     const canvasFw = document.getElementById("fireworks");
     const ctxFw = canvasFw.getContext("2d");
 
-    // Element Game & Quà
     const gameLayer = document.getElementById('game-layer');
     const gameScreen = document.getElementById('game-screen');
     const giftScreen = document.getElementById('gift-screen');
@@ -38,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     resizeAllCanvas();
 
     // ============================================================
-    // 3. LOGIC MINIGAME XẾP HÌNH (FIXED DROP LOGIC)
+    // 3. LOGIC MINIGAME (PHƯƠNG PHÁP BOUNDING BOX - FIX TRIỆT ĐỂ)
     // ============================================================
     const n = 3; 
     const gridSizePx = 300;
@@ -65,6 +61,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const dz = document.createElement('div');
                 dz.classList.add('puzzle-dropzone');
                 dz.dataset.r = r; dz.dataset.c = c;
+                // Lưu tham chiếu để dùng sau này
+                dz.id = `dropzone-${r}-${c}`;
                 setupDropzoneDesktop(dz);
                 puzzleGrid.appendChild(dz);
                 
@@ -80,7 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
         
-        // Xáo trộn
         pieces.sort(() => Math.random() - 0.5);
         const leftContainer = document.getElementById('pieces-container-left');
         const rightContainer = document.getElementById('pieces-container-right');
@@ -92,9 +89,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // --- HÀM XỬ LÝ KÉO THẢ (ĐÃ SỬA LỖI DROP) ---
+    // --- HÀM TÌM DROPZONE DỰA TRÊN TỌA ĐỘ (CHÌA KHÓA FIX LỖI) ---
+    function getDropzoneAtPoint(x, y) {
+        // Lấy tất cả các ô dropzone
+        const dropzones = document.querySelectorAll('.puzzle-dropzone');
+        for (let dz of dropzones) {
+            // Lấy vị trí hình chữ nhật của ô
+            const rect = dz.getBoundingClientRect();
+            // Kiểm tra xem tọa độ ngón tay (x,y) có nằm trong hình chữ nhật này không
+            if (x >= rect.left && x <= rect.right &&
+                y >= rect.top && y <= rect.bottom) {
+                return dz;
+            }
+        }
+        return null;
+    }
+
     function setupPieceEvents(piece) {
-        // 1. MOUSE (PC)
+        // --- DESKTOP ---
         piece.addEventListener('dragstart', () => {
             if(piece.classList.contains('placed')) return;
             draggedPiece = piece;
@@ -105,14 +117,16 @@ document.addEventListener("DOMContentLoaded", function () {
             piece.classList.remove('hidden');
         });
 
-        // 2. TOUCH (MOBILE)
+        // --- MOBILE (TOUCH) ---
         piece.addEventListener('touchstart', (e) => {
             if(piece.classList.contains('placed')) return;
-            e.preventDefault(); 
+            // QUAN TRỌNG: Ngăn chặn hành vi mặc định (cuộn, zoom)
+            if(e.cancelable) e.preventDefault();
             
             draggedPiece = piece;
             originalParent = piece.parentElement;
 
+            // Đưa ra body để không bị che
             document.body.appendChild(piece); 
 
             piece.style.position = 'fixed';
@@ -124,33 +138,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const touch = e.touches[0];
             movePieceToTouch(touch.clientX, touch.clientY, piece);
-        }, { passive: false });
+        }, { passive: false }); // Passive: false để cho phép preventDefault
 
         piece.addEventListener('touchmove', (e) => {
             if(!draggedPiece) return;
-            e.preventDefault();
+            if(e.cancelable) e.preventDefault(); // Chặn cuộn tuyệt đối
+
             const touch = e.touches[0];
             movePieceToTouch(touch.clientX, touch.clientY, draggedPiece);
         }, { passive: false });
 
-        // --- SỬA LỖI Ở ĐÂY ---
         piece.addEventListener('touchend', (e) => {
             if(!draggedPiece) return;
             
-            // 1. Ẩn mảnh ghép đi để nhìn xuyên qua nó
-            draggedPiece.hidden = true;
-
-            // 2. Lấy vị trí ngón tay
+            // Lấy vị trí ngón tay lúc thả ra
             const touch = e.changedTouches[0];
             
-            // 3. Tìm phần tử bên dưới ngón tay (giờ đã nhìn xuyên qua được mảnh ghép)
-            const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-            
-            // 4. Hiện lại mảnh ghép ngay lập tức
-            draggedPiece.hidden = false;
-
-            // 5. Kiểm tra xem bên dưới có phải là ô dropzone không
-            const dropzone = elemBelow ? elemBelow.closest('.puzzle-dropzone') : null;
+            // DÙNG HÀM TÍNH TOÁN (Thay vì elementFromPoint)
+            const dropzone = getDropzoneAtPoint(touch.clientX, touch.clientY);
 
             if (dropzone) {
                 handleDropLogic(dropzone, draggedPiece);
@@ -164,6 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function movePieceToTouch(x, y, piece) {
         const w = parseFloat(piece.style.width);
         const h = parseFloat(piece.style.height);
+        // Căn giữa mảnh ghép vào ngón tay
         piece.style.left = (x - w / 2) + 'px';
         piece.style.top = (y - h / 2) + 'px';
     }
@@ -197,8 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Nếu ô đã có người hoặc sai vị trí
         if (dropzone.hasChildNodes() || targetR !== pieceR || targetC !== pieceC) {
-             // Nếu đang dùng chuột thì không cần returnToOriginal vì dragend tự lo
-             // Nhưng nếu dùng touch thì cần
+             // Nếu đang ở trạng thái fixed (mobile dragging) thì trả về
              if (piece.style.position === 'fixed') {
                 returnToOriginal(piece);
              }
@@ -206,12 +211,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // --- ĐÚNG VỊ TRÍ ---
-        // Reset sạch style của mobile
         piece.style.position = '';
         piece.style.zIndex = '';
         piece.style.left = '';
         piece.style.top = '';
-        piece.style.width = '100%'; // Khớp với dropzone
+        piece.style.width = '100%'; 
         piece.style.height = '100%';
         piece.style.transform = 'none';
         piece.style.boxShadow = 'none';
@@ -219,11 +223,7 @@ document.addEventListener("DOMContentLoaded", function () {
         piece.draggable = false;
         piece.classList.add('placed');
         
-        dropzone.appendChild(piece); // Gắn chặt vào ô
-        
-        // Hiệu ứng âm thanh khi ghép đúng (tùy chọn)
-        // const audioClick = new Audio('./Audio/click.mp3'); audioClick.play().catch(()=>{});
-
+        dropzone.appendChild(piece); 
         checkWin();
     }
 
@@ -304,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     imgBase.onload = () => { drawBackground(); };
 
-    // --- SỰ KIỆN ĐÓNG MỞ ---
+    // --- SỰ KIỆN: LÌ XÌ -> THIỆP -> QUÀ ---
     function closeCardAndShowGift() {
         modal.classList.remove('open');
         cardPkg.classList.remove('is-open');
