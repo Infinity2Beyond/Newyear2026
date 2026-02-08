@@ -324,14 +324,14 @@ body {
 
 /* Trái tim */
 #heart {
-    position: relative; width: 50px; height: 50px; margin: 20px auto 0;
+    position: relative; width: 80px; height: 80px; margin: 30px auto 0;
     animation: heartbeat 1s infinite;
 }
 #heart::before, #heart::after {
-    content: ""; position: absolute; top: 0; width: 25px; height: 40px;
-    background: var(--primary-red); border-radius: 25px 25px 0 0;
+    content: ""; position: absolute; top: 0; width: 40px; height: 64px;
+    background: var(--primary-red); border-radius: 40px 40px 0 0;
 }
-#heart::before { left: 25px; transform: rotate(-45deg); transform-origin: 0 100%; }
+#heart::before { left: 40px; transform: rotate(-45deg); transform-origin: 0 100%; }
 #heart::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
 
 @keyframes heartbeat { 0% { transform: scale(1); } 20% { transform: scale(1.2); } 40% { transform: scale(1); } 100% { transform: scale(1); } }
@@ -350,9 +350,7 @@ body {
     /* Điều chỉnh Thiệp trên điện thoại */
     .card { width: 70%; height: auto; aspect-ratio: 3/4; }
     .card-title { font-size: 35px; } .card-poem { font-size: 18px; }
-}
 
-@media (max-width: 768px) {
     #canvas {
         /* Ảnh cho điện thoại */
         background-image: url('./images/newyear.jpg'); 
