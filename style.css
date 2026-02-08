@@ -342,14 +342,83 @@ body {
    5. RESPONSIVE
    ========================================================================== */
 @media (max-width: 768px) {
-    /* Điều chỉnh Game trên điện thoại */
+    /* 1. Điều chỉnh kích thước Game xếp hình */
     :root { --grid-size: 300px; }
-    .game-area { flex-direction: column; gap: 10px; }
-    .side-container { width: 300px; height: 80px; flex-wrap: nowrap; overflow-x: auto; }
+    .game-area { flex-direction: column; gap: 15px; }
+    .game-title { font-size: 24px; padding: 8px 20px; }
     
-    /* Điều chỉnh Thiệp trên điện thoại */
-    .card { width: 70%; height: auto; aspect-ratio: 3/4; }
-    .card-title { font-size: 35px; } .card-poem { font-size: 18px; }
+    /* Khay chứa mảnh ghép: Cho phép cuộn ngang */
+    .side-container { 
+        width: 300px; 
+        height: 70px; 
+        flex-wrap: nowrap; 
+        overflow-x: auto; 
+        justify-content: flex-start;
+    }
+
+    /* 2. Điều chỉnh Thiệp 3D (QUAN TRỌNG) */
+    .card { 
+        /* Tăng độ rộng để tận dụng màn hình */
+        width: 90vw; 
+        /* Chiều cao tự động theo tỷ lệ hoặc cố định tối đa */
+        height: 70vh; 
+        max-height: 600px; 
+    }
+
+    /* Giảm lề trong để có chỗ cho chữ */
+    .card-center { 
+        padding: 15px 10px; 
+    }
+
+    /* Thu nhỏ tiêu đề */
+    .card-title { 
+        font-size: 28px; /* Giảm từ 50px xuống 28px */
+        margin-bottom: 5px;
+    } 
+
+    /* Thu nhỏ bài thơ & chỉnh khoảng cách dòng */
+    .card-poem { 
+        font-size: 15px; /* Giảm từ 24px xuống 15px */
+        line-height: 1.4; 
+        margin: 10px 0;
+        white-space: normal; /* Cho phép xuống dòng tự nhiên */
+    }
+    
+    .card-wish {
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    /* 3. Thu nhỏ Trái tim (Tính toán lại tỷ lệ) */
+    #heart {
+        width: 60px; height: 60px; /* Giảm size */
+        margin: 15px auto 0;
+    }
+    #heart::before, #heart::after {
+        width: 30px; height: 48px;
+        border-radius: 30px 30px 0 0;
+    }
+    #heart::before { left: 30px; }
+
+    /* 4. Thu nhỏ Nút Mở (Con dấu) */
+    .card .open {
+        right: -40px; /* Thu vào một chút */
+    }
+    .card .open-main {
+        width: 80px; height: 80px; /* Giảm từ 120px xuống 80px */
+    }
+    .card .open-title {
+        font-size: 14px;
+    }
+
+    /* 5. Thu nhỏ Nhân vật/Hộp quà nếu cần */
+    .boxgift-container {
+        transform: scale(0.8); /* Thu nhỏ toàn bộ hộp quà 20% */
+        margin-top: 20px;
+    }
+    .box-body {
+        margin-top: 50px;
+    }
 
     #canvas {
         /* Ảnh cho điện thoại */
