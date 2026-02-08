@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Năm Mới 2026</title>
+    <script src="https://kit.fontawesome.com/72956b8baa.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Great+Vibes&family=Playball&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <audio id="AudioMain" loop src="./Audio/Tet.mp3"></audio>
+
+    <div id="game-layer">
+        
+        <div id="game-screen" class="screen">
+            <h2 class="game-title">Ghép tranh nhận lì xì nhé!</h2>
+            <div class="game-area">
+                <div id="pieces-container-left" class="pieces-container side-container"></div>
+                <div id="puzzle-grid" class="puzzle-grid"></div>
+                <div id="pieces-container-right" class="pieces-container side-container"></div>
+            </div>
+        </div>
+
+        <div id="gift-screen" class="screen hidden">
+            <h2 class="blink" style="color: #fff; text-shadow: 2px 2px 4px #d60000;">Chúc mừng! Bạn có quà nè!</h2>
+            <!-- <p style="color: #fff;">(Chạm vào hộp để mở)</p> -->
+            
+            <div class="boxgift-container">
+                <div class="boxgift"> 
+                    <div id="boxbody" class="box-body">
+                        <img class="img-lixi" id="lixi-trigger" src="./images/lixi_minigame.png" alt="Lì Xì" title="Nhấn để nhận lì xì">
+                        <div class="box-lid">      
+                            <div class="box-bowtie"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+    <canvas id="fireworks"></canvas>
+
+    <div class="modal js-modal">
+        <div class="modal-container js-modal-container">
+            <div class="card">
+                <div class="card-packaging">
+                    <div class="card-center">
+                        <a class="close" href="#"></a>
+                        <div class="card-center-content">
+                            <div class="card-title">Xuân Bính Ngọ 2026</div>
+                            <div class="card-poem">
+                                "Mã đáo thành công, vạn sự lành,<br>
+                                Tài lộc đua nhau tới rất nhanh.<br>
+                                Sức khỏe dồi dào, đời hạnh phúc,<br>
+                                Tương lai rạng rỡ, mộng thêm xanh."
+                            </div>
+                            <div class="card-wish">Chúc mừng năm mới!</div>
+                            <div id="heart"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card--first">
+                        <div class="card-wrapper front">
+                            <a class="open" href="#"><div class="open-main"><span class="open-title">Mở</span></div></a>
+                        </div>
+                        <div class="card-wrapper back"></div>
+                    </div>
+                    <div class="card--third">
+                        <div class="card-wrapper front"></div>
+                        <div class="card-wrapper back"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
