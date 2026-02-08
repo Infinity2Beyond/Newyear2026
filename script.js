@@ -3,29 +3,26 @@ document.addEventListener("DOMContentLoaded", function () {
     // 1. KHỞI TẠO CÁC BIẾN & ELEMENT
     // ============================================================
     
-    // --- Các element của Thiệp & Hiệu ứng ---
+    // Element Thiệp & Hiệu ứng
     const modal = document.querySelector('.js-modal');
     const btnOpenCard = document.querySelector('.open');
     const btnCloseCard = document.querySelector('.close');
     const cardPkg = document.querySelector('.card-packaging');
     const audioMain = document.getElementById("AudioMain");
 
-    // Canvas Nền (Hoa/Tuyết)
+    // Canvas
     const canvasBg = document.getElementById("canvas");
     const ctxBg = canvasBg.getContext("2d");
-
-    // Canvas Pháo Hoa
     const canvasFw = document.getElementById("fireworks");
     const ctxFw = canvasFw.getContext("2d");
 
-    // --- Các element của Game & Hộp quà ---
+    // Element Game & Quà
     const gameLayer = document.getElementById('game-layer');
     const gameScreen = document.getElementById('game-screen');
     const giftScreen = document.getElementById('gift-screen');
     const puzzleGrid = document.getElementById('puzzle-grid');
     const lixiTrigger = document.getElementById('lixi-trigger'); 
 
-    // Biến chung
     let width, height;
 
     // ============================================================
@@ -34,19 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
     function resizeAllCanvas() {
         width = window.innerWidth;
         height = window.innerHeight;
-
-        canvasBg.width = width;
-        canvasBg.height = height;
-        
-        canvasFw.width = width;
-        canvasFw.height = height;
+        canvasBg.width = width; canvasBg.height = height;
+        canvasFw.width = width; canvasFw.height = height;
     }
     window.addEventListener('resize', resizeAllCanvas);
     resizeAllCanvas();
 
-
     // ============================================================
-    // 3. LOGIC MINIGAME XẾP HÌNH (FIXED MOBILE DRAG)
+    // 3. LOGIC MINIGAME XẾP HÌNH (FIXED DROP LOGIC)
     // ============================================================
     const n = 3; 
     const gridSizePx = 300;
@@ -56,12 +48,10 @@ document.addEventListener("DOMContentLoaded", function () {
     
     let pieces = [];
     let draggedPiece = null;
-    let originalParent = null; // Lưu nhà cũ để quay về nếu thả sai
+    let originalParent = null; 
 
-    // Tự động chạy game
     initPuzzle();
     
-    // Auto-play nhạc
     document.body.addEventListener('click', () => {
         if(audioMain.paused) {
             audioMain.volume = 0.5;
@@ -70,28 +60,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }, { once: true });
 
     function initPuzzle() {
-        // Tạo ô dropzone
         for(let r=0; r<n; r++) {
             for(let c=0; c<n; c++) {
                 const dz = document.createElement('div');
                 dz.classList.add('puzzle-dropzone');
                 dz.dataset.r = r; dz.dataset.c = c;
-                setupDropzoneDesktop(dz); // Chỉ dùng cho chuột
+                setupDropzoneDesktop(dz);
                 puzzleGrid.appendChild(dz);
                 
                 const p = document.createElement('div');
                 p.classList.add('puzzle-piece');
-                p.draggable = true; // Cho desktop
+                p.draggable = true;
                 p.dataset.correctR = r; p.dataset.correctC = c;
                 const size = gridSizePx / n;
                 p.style.backgroundPosition = `-${c*size}px -${r*size}px`;
                 
-                setupPieceEvents(p); // Setup cả Touch và Mouse
+                setupPieceEvents(p);
                 pieces.push(p);
             }
         }
         
-        // Xáo trộn & Phân phát
+        // Xáo trộn
         pieces.sort(() => Math.random() - 0.5);
         const leftContainer = document.getElementById('pieces-container-left');
         const rightContainer = document.getElementById('pieces-container-right');
@@ -103,9 +92,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // --- HÀM XỬ LÝ KÉO THẢ (QUAN TRỌNG: FIX CHO MOBILE) ---
+    // --- HÀM XỬ LÝ KÉO THẢ (ĐÃ SỬA LỖI DROP) ---
     function setupPieceEvents(piece) {
-        // 1. MÁY TÍNH (MOUSE)
+        // 1. MOUSE (PC)
         piece.addEventListener('dragstart', () => {
             if(piece.classList.contains('placed')) return;
             draggedPiece = piece;
@@ -116,26 +105,23 @@ document.addEventListener("DOMContentLoaded", function () {
             piece.classList.remove('hidden');
         });
 
-        // 2. ĐIỆN THOẠI (TOUCH)
+        // 2. TOUCH (MOBILE)
         piece.addEventListener('touchstart', (e) => {
             if(piece.classList.contains('placed')) return;
-            e.preventDefault(); // Chặn cuộn trang
+            e.preventDefault(); 
             
             draggedPiece = piece;
-            originalParent = piece.parentElement; // Lưu vị trí cũ
+            originalParent = piece.parentElement;
 
-            // --- CHIẾN THUẬT: ĐEM RA KHỎI KHAY, GẮN VÀO BODY ---
-            document.body.appendChild(piece); // Đưa lên cấp cao nhất
+            document.body.appendChild(piece); 
 
             piece.style.position = 'fixed';
-            piece.style.zIndex = '999999'; // Luôn nằm trên cùng
+            piece.style.zIndex = '999999';
             piece.style.width = (gridSizePx / n) + 'px';
             piece.style.height = (gridSizePx / n) + 'px';
-            piece.style.pointerEvents = 'none'; // Để chạm xuyên qua tìm dropzone
-            piece.style.transform = 'scale(1.1)'; // Phóng to nhẹ
-            piece.style.boxShadow = '0 10px 20px rgba(0,0,0,0.5)'; // Đổ bóng cho đẹp
+            piece.style.transform = 'scale(1.1)'; 
+            piece.style.boxShadow = '0 10px 20px rgba(0,0,0,0.5)';
 
-            // Cập nhật vị trí ngay lập tức
             const touch = e.touches[0];
             movePieceToTouch(touch.clientX, touch.clientY, piece);
         }, { passive: false });
@@ -147,22 +133,28 @@ document.addEventListener("DOMContentLoaded", function () {
             movePieceToTouch(touch.clientX, touch.clientY, draggedPiece);
         }, { passive: false });
 
+        // --- SỬA LỖI Ở ĐÂY ---
         piece.addEventListener('touchend', (e) => {
             if(!draggedPiece) return;
             
-            // Bật lại tương tác
-            draggedPiece.style.pointerEvents = 'auto';
-            draggedPiece.style.boxShadow = 'none';
+            // 1. Ẩn mảnh ghép đi để nhìn xuyên qua nó
+            draggedPiece.hidden = true;
 
-            // Tìm cái gì đang ở dưới ngón tay
+            // 2. Lấy vị trí ngón tay
             const touch = e.changedTouches[0];
+            
+            // 3. Tìm phần tử bên dưới ngón tay (giờ đã nhìn xuyên qua được mảnh ghép)
             const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+            
+            // 4. Hiện lại mảnh ghép ngay lập tức
+            draggedPiece.hidden = false;
+
+            // 5. Kiểm tra xem bên dưới có phải là ô dropzone không
             const dropzone = elemBelow ? elemBelow.closest('.puzzle-dropzone') : null;
 
             if (dropzone) {
                 handleDropLogic(dropzone, draggedPiece);
             } else {
-                // Thả ra ngoài -> Về nhà cũ
                 returnToOriginal(draggedPiece);
             }
             draggedPiece = null;
@@ -181,9 +173,11 @@ document.addEventListener("DOMContentLoaded", function () {
         piece.style.zIndex = '';
         piece.style.left = '';
         piece.style.top = '';
+        piece.style.width = ''; 
+        piece.style.height = '';
         piece.style.transform = `rotate(${Math.random() * 10 - 5}deg)`;
+        piece.style.boxShadow = 'none';
         
-        // Trả về khay cũ
         if(originalParent) originalParent.appendChild(piece);
     }
 
@@ -203,20 +197,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Nếu ô đã có người hoặc sai vị trí
         if (dropzone.hasChildNodes() || targetR !== pieceR || targetC !== pieceC) {
-             returnToOriginal(piece);
+             // Nếu đang dùng chuột thì không cần returnToOriginal vì dragend tự lo
+             // Nhưng nếu dùng touch thì cần
+             if (piece.style.position === 'fixed') {
+                returnToOriginal(piece);
+             }
              return;
         }
 
         // --- ĐÚNG VỊ TRÍ ---
+        // Reset sạch style của mobile
         piece.style.position = '';
         piece.style.zIndex = '';
         piece.style.left = '';
         piece.style.top = '';
+        piece.style.width = '100%'; // Khớp với dropzone
+        piece.style.height = '100%';
         piece.style.transform = 'none';
+        piece.style.boxShadow = 'none';
+        
         piece.draggable = false;
         piece.classList.add('placed');
         
         dropzone.appendChild(piece); // Gắn chặt vào ô
+        
+        // Hiệu ứng âm thanh khi ghép đúng (tùy chọn)
+        // const audioClick = new Audio('./Audio/click.mp3'); audioClick.play().catch(()=>{});
+
         checkWin();
     }
 
