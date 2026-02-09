@@ -408,12 +408,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Danh sách quà "bựa" hoặc đặc biệt hơn lì xì thường
     const secretGifts = [
-        "Một cái ôm thắm thiết ❤️",
+        "Một cái ôm thắm thiết❤️",
         "Phiếu Bé Ngoan trọn đời!",
-        "🤡 Chúc may mắn lần sau!",
+        "🤡Chúc may mắn lần sau!",
         "1 chuyến du lịch qua màn ảnh nhỏ",
         "Tình yêu siêu to khổng lồ!",
-        "999 đóa hồng 🌹",
+        "999 đóa hồng🌹🌹🌹",
         "Một cái ôm ấm áp!"
     ];
 
