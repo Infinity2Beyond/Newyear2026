@@ -28,16 +28,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // 1. Thay thế chữ "cậu" hoặc "Cậu" bằng tên người dùng
         // Sử dụng innerHTML để giữ nguyên các thẻ html con (nếu có)
         
-        // Thay cho: "Chúc cậu năm mới..."
         if(wishText) wishText.innerHTML = wishText.innerHTML.replace(/cậu/gi, name);
         
-        // Thay cho: "Quà cho cậu nè!"
         if(giftTitle) giftTitle.innerHTML = giftTitle.innerHTML.replace(/cậu/gi, name);
         
-        // Thay cho: "Lì xì bí mật dành cho cậu nè"
         if(secretGiftText) secretGiftText.innerHTML = secretGiftText.innerHTML.replace(/cậu/gi, name);
         
-        // Cập nhật tiêu đề trang web luôn cho xịn
         document.title = `Chúc Mừng Năm Mới ${name} - 2026`;
 
         // 2. Ẩn màn hình Intro và Hiện Game
@@ -313,6 +309,29 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener('mousemove', function(e) { mouse.x = e.clientX; mouse.y = e.clientY; });
     window.addEventListener('mouseleave', function() { mouse.x = -100; mouse.y = -100; });
 
+    // 1. Khi ngón tay di chuyển trên màn hình
+    window.addEventListener('touchmove', function(e) {
+        // e.touches[0] là ngón tay đầu tiên chạm vào
+        if (e.touches.length > 0) {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+        }
+    }, { passive: true }); // passive: true giúp cuộn trang mượt hơn
+
+    // 2. Khi ngón tay vừa chạm vào màn hình
+    window.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 0) {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+        }
+    }, { passive: true });
+
+    // 3. Khi nhấc ngón tay ra (Reset tọa độ để hiệu ứng dừng lại)
+    window.addEventListener('touchend', function() {
+        mouse.x = -100;
+        mouse.y = -100;
+    });
+
     for (let i = 0; i < objectsCount; i++) {
         let opacity = Math.random() * 0.4 + 0.6; 
         objects.push({
@@ -516,8 +535,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const secretGifts = [
         "Một cái ôm thắm thiết!",
         "Phiếu bé ngoan trọn đời!",
-        "1 chuyến du lịch qua màn ảnh nhỏ",
-        "Tình yêu siêu to khổng lồ!",
+        "1 chuyến du lịch qua màn ảnh nhỏ!",
+        "Một tình yêu siêu to khổng lồ!",
     ];
 
     heartBtn.addEventListener('dblclick', (e) => {
