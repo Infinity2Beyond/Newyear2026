@@ -359,6 +359,74 @@ body {
     display: block;
 }
 
+/* --- POPUP QUÀ BÍ MẬT (Hidden Gift) --- */
+#hidden-gift-popup {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 99999; /* Đảm bảo nằm trên cùng, cao hơn cả thiệp */
+    display: flex; justify-content: center; align-items: center;
+    background: rgba(0, 0, 0, 0.85);
+    animation: fadeIn 0.3s;
+}
+
+.gift-content {
+    background: #fff url('./images/background2.png'); /* Dùng nền giống thiệp cho đồng bộ */
+    background-size: cover;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    border: 4px solid var(--primary-gold);
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    min-width: 320px;
+}
+
+.gift-content h3 {
+    font-family: 'Pacifico', cursive;
+    color: var(--primary-red);
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.gift-content p {
+    font-size: 18px;
+    color: #333;
+}
+
+#gift-result {
+    font-family: 'Great Vibes', cursive;
+    font-size: 45px;
+    color: #d60000;
+    font-weight: bold;
+    margin: 20px 0;
+    text-shadow: 1px 1px 0px #f1c40f;
+}
+
+#close-gift-btn {
+    background: var(--primary-red);
+    color: #fff;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 50px;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: 'Pacifico', cursive;
+    transition: transform 0.2s;
+    border: 2px solid var(--primary-gold);
+}
+
+#close-gift-btn:hover {
+    transform: scale(1.1);
+    background: #b30000;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+
 /* ==========================================================================
    5. RESPONSIVE
    ========================================================================== */

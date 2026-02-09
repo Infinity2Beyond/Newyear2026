@@ -397,4 +397,53 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         if (isFireworksRunning) requestAnimationFrame(animateFireworks);
     }
+
+    // ============================================================
+    // 7. TÍNH NĂNG QUÀ ẨN (DOUBLE CLICK TRÁI TIM)
+    // ============================================================
+    const heartBtn = document.getElementById('heart');
+    const hiddenPopup = document.getElementById('hidden-gift-popup');
+    const giftResult = document.getElementById('gift-result');
+    const closeGiftBtn = document.getElementById('close-gift-btn');
+
+    // Danh sách quà "bựa" hoặc đặc biệt hơn lì xì thường
+    const secretGifts = [
+        "Một cái ôm thắm thiết ❤️",
+        "Phiếu Bé Ngoan trọn đời!",
+        "🤡 Chúc may mắn lần sau!",
+        "1 chuyến du lịch qua màn ảnh nhỏ",
+        "Tình yêu siêu to khổng lồ!",
+        "999 đóa hồng 🌹",
+        "Một cái ôm ấm áp!"
+    ];
+
+    // Sự kiện Click đúp (dblclick)
+    heartBtn.addEventListener('dblclick', (e) => {
+        e.stopPropagation(); // Ngăn sự kiện lan ra làm đóng thiệp
+        e.preventDefault();  // Ngăn bôi đen trúng tim
+        
+        // Random quà
+        const randomGift = secretGifts[Math.floor(Math.random() * secretGifts.length)];
+        giftResult.innerText = randomGift;
+        
+        // Hiện popup quà ẩn
+        hiddenPopup.classList.remove('hidden');
+        
+        // Hiệu ứng pháo hoa chúc mừng thêm lần nữa
+        startContinuousFireworks();
+    });
+
+    // Đóng popup quà ẩn
+    closeGiftBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hiddenPopup.classList.add('hidden');
+    });
+
+    // Click ra ngoài popup cũng đóng
+    hiddenPopup.addEventListener('click', (e) => {
+        if (e.target === hiddenPopup) {
+            hiddenPopup.classList.add('hidden');
+        }
+    });
+
 });
