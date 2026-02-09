@@ -407,7 +407,7 @@ body {
     #heart::before { left: 25px; }
     
    .card .open { 
-        right: -60px; /* Đẩy ra xa hơn chút để không che thiệp */
+        right: -70px; /* Đẩy ra xa hơn chút để không che thiệp */
     }
     .card .open-main { 
         width: 140px;  /* Tăng từ 70px lên 140px */
