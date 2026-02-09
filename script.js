@@ -1,29 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     // ============================================================
-    // 1. KHỞI TẠO CÁC BIẾN & ELEMENT
-    // ============================================================
-    const modal = document.querySelector('.js-modal');
-    const btnOpenCard = document.querySelector('.open');
-    const btnCloseCard = document.querySelector('.close');
-    const cardPkg = document.querySelector('.card-packaging');
-    const audioMain = document.getElementById("AudioMain");
-
-    const canvasBg = document.getElementById("canvas");
-    const ctxBg = canvasBg.getContext("2d");
-    const canvasFw = document.getElementById("fireworks");
-    const ctxFw = canvasFw.getContext("2d");
-
-    const gameLayer = document.getElementById('game-layer');
-    const gameScreen = document.getElementById('game-screen');
-    const giftScreen = document.getElementById('gift-screen');
-    const puzzleGrid = document.getElementById('puzzle-grid');
-    const lixiTrigger = document.getElementById('lixi-trigger'); 
-
-    let width, height;
-
-
-    // ============================================================
-    // 0. XỬ LÝ MÀN HÌNH NHẬP TÊN (INTRO)
+    // 0. INTRO
     // ============================================================
     const introScreen = document.getElementById('intro-screen');
     const startBtn = document.getElementById('start-btn');
@@ -68,18 +45,30 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             introScreen.style.display = 'none';
             gameLayer.style.display = 'flex'; // Hiện lại game layer
-            
-            // 3. Phát nhạc ngay lập tức (Giải quyết vấn đề Autoplay)
-            audioMain.volume = 0.5;
-            audioMain.play().catch((err) => console.log("Chặn phát nhạc: ", err));
-            
-            // Nếu bạn đã thêm nút bật tắt nhạc ở câu hỏi trước, hãy kích hoạt trạng thái cho nó
-            if(typeof musicBtn !== 'undefined') {
-                musicBtn.classList.remove('hidden');
-                musicBtn.classList.add('playing-music');
-            }
         }, 500);
     }
+    
+    // ============================================================
+    // 1. KHỞI TẠO CÁC BIẾN & ELEMENT
+    // ============================================================
+    const modal = document.querySelector('.js-modal');
+    const btnOpenCard = document.querySelector('.open');
+    const btnCloseCard = document.querySelector('.close');
+    const cardPkg = document.querySelector('.card-packaging');
+    const audioMain = document.getElementById("AudioMain");
+
+    const canvasBg = document.getElementById("canvas");
+    const ctxBg = canvasBg.getContext("2d");
+    const canvasFw = document.getElementById("fireworks");
+    const ctxFw = canvasFw.getContext("2d");
+
+    const gameLayer = document.getElementById('game-layer');
+    const gameScreen = document.getElementById('game-screen');
+    const giftScreen = document.getElementById('gift-screen');
+    const puzzleGrid = document.getElementById('puzzle-grid');
+    const lixiTrigger = document.getElementById('lixi-trigger'); 
+
+    let width, height;
 
     // ============================================================
     // 2. XỬ LÝ RESIZE
