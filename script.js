@@ -343,7 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             gameLayer.style.display = 'none';
             modal.classList.add('open');
-            setTimeout(typeWriter, 500)
+            // setTimeout(typeWriter, 500)
             audioMain.volume = 1.0;
             if(audioMain.paused) audioMain.play().catch(()=>{});
             imgLixi = new Image(); imgLixi.src = './images/lixi.png'; isTransforming = true; 
@@ -372,6 +372,7 @@ document.addEventListener("DOMContentLoaded", function () {
         e.stopPropagation(); 
         cardPkg.classList.add('is-open'); 
         startContinuousFireworks(); 
+        setTimeout(typeWriter, 500)
     });
 
 

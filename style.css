@@ -406,8 +406,16 @@ body {
     #heart::before, #heart::after { width: 25px; height: 40px; border-radius: 25px 25px 0 0; }
     #heart::before { left: 25px; }
     
-    .card .open { right: -30px; }
-    .card .open-main { width: 70px; height: 70px; } /* Nút mở nhỏ lại xíu để ko che chữ */
+   .card .open { 
+        right: -60px; /* Đẩy ra xa hơn chút để không che thiệp */
+    }
+    .card .open-main { 
+        width: 140px;  /* Tăng từ 70px lên 140px */
+        height: 140px; /* Tăng từ 70px lên 140px */
+    } /* Nút mở nhỏ lại xíu để ko che chữ */
+    .card .open-title {
+        font-size: 24px; /* Tăng cỡ chữ nút Mở cho cân đối */
+    }
     
     .boxgift-container { transform: scale(0.8); margin-top: 20px; }
     .box-body { margin-top: 50px; }
