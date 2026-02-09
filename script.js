@@ -224,6 +224,35 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    let isTyping = false; // Cờ kiểm tra để không gõ lại nhiều lần
+
+    function typeWriter() {
+        const element = document.getElementById('poem');
+        if (!element || isTyping) return; // Nếu đang gõ hoặc gõ rồi thì thôi
+        
+        isTyping = true;
+        const text = element.getAttribute('data-text');
+        element.innerHTML = ""; // Xóa sạch trước khi gõ
+        
+        let i = 0;
+        const speed = 50; // Tốc độ gõ (càng nhỏ càng nhanh)
+
+        function typing() {
+            if (i < text.length) {
+                let char = text.charAt(i);
+                // Nếu gặp dấu | thì đổi thành thẻ xuống dòng <br>
+                if (char === '|') {
+                    element.innerHTML += "<br>";
+                } else {
+                    element.innerHTML += char;
+                }
+                i++;
+                setTimeout(typing, speed);
+            }
+        }
+        typing();
+    }
+
 
     // ============================================================
     // 4. LOGIC HIỆU ỨNG NỀN & SỰ KIỆN
@@ -314,6 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             gameLayer.style.display = 'none';
             modal.classList.add('open');
+            setTimeout(typeWriter, 500)
             audioMain.volume = 1.0;
             if(audioMain.paused) audioMain.play().catch(()=>{});
             imgLixi = new Image(); imgLixi.src = './images/lixi.png'; isTransforming = true; 

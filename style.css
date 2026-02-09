@@ -353,87 +353,64 @@ body {
 .blink { animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: 0.5; } }
 
+#poem {
+    white-space: pre-line; /* Để hiểu ký tự xuống dòng */
+    min-height: 150px;     /* Quan trọng: Giữ khung cố định để thiệp không bị co giật */
+    display: block;
+}
+
 /* ==========================================================================
    5. RESPONSIVE
    ========================================================================== */
 @media (max-width: 768px) {
-    /* 1. Điều chỉnh kích thước Game xếp hình */
     :root { --grid-size: 300px; }
-    .game-area { flex-direction: column; gap: 15px; }
-    .game-title { font-size: 24px; padding: 8px 20px; }
     
-    /* Khay chứa mảnh ghép: Cho phép cuộn ngang */
-    .side-container { 
-        width: 300px; 
-        height: 70px; 
-        flex-wrap: nowrap; 
-        overflow-x: auto; 
-        justify-content: flex-start;
-    }
+    /* Game xếp hình */
+    .game-area { flex-direction: column; gap: 15px; }
+    .side-container { width: 300px; height: 70px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; }
+    .game-title { font-size: 24px; padding: 8px 20px; }
 
-    /* 2. Điều chỉnh Thiệp 3D (QUAN TRỌNG) */
+    /* --- CẤU HÌNH THIỆP CHO MOBILE --- */
     .card { 
-        /* Tăng độ rộng để tận dụng màn hình */
-        width: 90vw; 
-        /* Chiều cao tự động theo tỷ lệ hoặc cố định tối đa */
-        height: 70vh; 
-        max-height: 600px; 
+        width: 90vw;       /* Chiếm 90% chiều ngang màn hình */
+        height: 75vh;      /* Tăng chiều cao lên để chứa chữ to */
+        max-height: 650px; 
     }
 
-    /* Giảm lề trong để có chỗ cho chữ */
     .card-center { 
-        padding: 15px 10px; 
+        padding: 10px 5px; /* Giảm lề để nhường chỗ cho chữ */
     }
 
-    /* Thu nhỏ tiêu đề */
+    /* 1. Tiêu đề "Xuân Bính Ngọ" to hơn */
     .card-title { 
-        font-size: 28px; /* Giảm từ 50px xuống 28px */
-        margin-bottom: 5px;
+        font-size: 36px;  /* Tăng từ 28px lên 36px */
+        margin-bottom: 10px;
     } 
 
-    /* Thu nhỏ bài thơ & chỉnh khoảng cách dòng */
+    /* 2. Bài thơ to rõ ràng */
     .card-poem { 
-        font-size: 15px; /* Giảm từ 24px xuống 15px */
-        line-height: 1.4; 
-        margin: 10px 0;
-        white-space: normal; /* Cho phép xuống dòng tự nhiên */
+        font-size: 20px;  /* Tăng từ 15px lên 20px (Rất dễ đọc) */
+        line-height: 1.5; /* Giãn dòng thoáng hơn */
+        white-space: normal; 
+        min-height: 140px; 
     }
     
+    /* 3. Lời chúc to hơn */
     .card-wish {
-        font-size: 14px;
-        margin-top: 10px;
+        font-size: 18px;  /* Tăng từ 14px lên 18px */
+        margin-top: 15px;
     }
 
-    /* 3. Thu nhỏ Trái tim (Tính toán lại tỷ lệ) */
-    #heart {
-        width: 60px; height: 60px; /* Giảm size */
-        margin: 15px auto 0;
-    }
-    #heart::before, #heart::after {
-        width: 30px; height: 48px;
-        border-radius: 30px 30px 0 0;
-    }
-    #heart::before { left: 30px; }
-
-    /* 4. Thu nhỏ Nút Mở (Con dấu) */
-    .card .open {
-        right: -40px; /* Thu vào một chút */
-    }
-    .card .open-main {
-        width: 80px; height: 80px; /* Giảm từ 120px xuống 80px */
-    }
-    .card .open-title {
-        font-size: 14px;
-    }
-
-    /* 5. Thu nhỏ Nhân vật/Hộp quà nếu cần */
-    .boxgift-container {
-        transform: scale(0.8); /* Thu nhỏ toàn bộ hộp quà 20% */
-        margin-top: 20px;
-    }
-    .box-body {
-        margin-top: 50px;
-    }
+    /* Các thành phần khác thu nhỏ cho cân đối */
+    #heart { width: 50px; height: 50px; margin: 15px auto 0; }
+    #heart::before, #heart::after { width: 25px; height: 40px; border-radius: 25px 25px 0 0; }
+    #heart::before { left: 25px; }
+    
+    .card .open { right: -30px; }
+    .card .open-main { width: 70px; height: 70px; } /* Nút mở nhỏ lại xíu để ko che chữ */
+    
+    .boxgift-container { transform: scale(0.8); margin-top: 20px; }
+    .box-body { margin-top: 50px; }
 
     #canvas {
         /* Ảnh cho điện thoại */
