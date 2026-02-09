@@ -17,6 +17,19 @@
 
 </head>
 <body>
+
+    <div id="intro-screen" class="screen intro-container">
+        <div class="intro-content">
+            <h1 class="intro-title">Chào bạn!</h1>
+            <p>Trước khi bắt đầu, hãy cho mình biết tên của bạn nhé:</p>
+            <input type="text" id="username-input" placeholder="Nhập tên của bạn..." autocomplete="off">
+            <button id="start-btn">Bắt đầu</button>
+        </div>
+    </div>
+
+    <div id="music-control" class="hidden">
+        <i class="fas fa-volume-up"></i>
+    </div>
     
     <audio id="AudioMain" loop src="./Audio/Tet.mp3"></audio>
 
@@ -60,7 +73,7 @@
                         <div class="card-center-content">
                             <div class="card-title">Xuân Bính Ngọ 2026</div>
                             <div class="card-poem" id="poem" 
-                                data-text="Mã đáo thành công, vạn sự lành.|Tài lộc đua nhau tới rất nhanh.|Sức khỏe dồi dào, đời hạnh phúc.|Tương lai rạng rỡ, mộng thêm xanh.">
+                                data-text="Ngựa về báo hỷ, vạn điều may,|Lộc biếc hoa thơm, đậu chốn này.|Vững bước an nhiên, đời trải mộng,|Sáng ngời danh tiếng, chén nồng say.">
                             </div>
                             <div class="card-wish">Chúc cậu năm mới bứt phá như Ngựa chiến, tiền vào như nước, vạn sự như ý nha!</div>
                             <div id="heart"></div>
@@ -84,7 +97,7 @@
 
     <div id="hidden-gift-popup" class="hidden">
         <div class="gift-content">
-            <h3>✨ Cậu tìm thấy món quà ẩn rồi! ✨</h3>
+            <!-- <h3>Cậu tìm thấy món quà ẩn rồi!</h3> -->
             <p>Lì xì bí mật dành cho cậu nè</p>
             <div id="gift-result"></div>
             <button id="close-gift-btn">Tuyệt vời!</button>

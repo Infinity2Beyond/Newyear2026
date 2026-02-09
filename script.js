@@ -21,6 +21,66 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let width, height;
 
+
+    // ============================================================
+    // 0. XỬ LÝ MÀN HÌNH NHẬP TÊN (INTRO)
+    // ============================================================
+    const introScreen = document.getElementById('intro-screen');
+    const startBtn = document.getElementById('start-btn');
+    const nameInput = document.getElementById('username-input');
+    
+    // Các phần tử cần thay thế tên
+    // Dựa trên file index.html của bạn
+    const wishText = document.querySelector('.card-wish'); 
+    const giftTitle = document.querySelector('#gift-screen h2');
+    const secretGiftText = document.querySelector('#hidden-gift-popup p'); 
+
+    startBtn.addEventListener('click', () => {
+        handleStart();
+    });
+
+    // Cho phép ấn Enter để bắt đầu luôn
+    nameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleStart();
+    });
+
+    function handleStart() {
+        let name = nameInput.value.trim();
+        if (!name) name = "Cậu"; // Nếu không nhập thì để mặc định là "Cậu"
+
+        // 1. Thay thế chữ "cậu" hoặc "Cậu" bằng tên người dùng
+        // Sử dụng innerHTML để giữ nguyên các thẻ html con (nếu có)
+        
+        // Thay cho: "Chúc cậu năm mới..."
+        if(wishText) wishText.innerHTML = wishText.innerHTML.replace(/cậu/gi, name);
+        
+        // Thay cho: "Quà cho cậu nè!"
+        if(giftTitle) giftTitle.innerHTML = giftTitle.innerHTML.replace(/cậu/gi, name);
+        
+        // Thay cho: "Lì xì bí mật dành cho cậu nè"
+        if(secretGiftText) secretGiftText.innerHTML = secretGiftText.innerHTML.replace(/cậu/gi, name);
+        
+        // Cập nhật tiêu đề trang web luôn cho xịn
+        document.title = `Chúc Mừng Năm Mới ${name} - 2026`;
+
+        // 2. Ẩn màn hình Intro và Hiện Game
+        introScreen.style.opacity = 0;
+        setTimeout(() => {
+            introScreen.style.display = 'none';
+            gameLayer.style.display = 'flex'; // Hiện lại game layer
+            
+            // 3. Phát nhạc ngay lập tức (Giải quyết vấn đề Autoplay)
+            audioMain.volume = 0.5;
+            audioMain.play().catch((err) => console.log("Chặn phát nhạc: ", err));
+            
+            // Nếu bạn đã thêm nút bật tắt nhạc ở câu hỏi trước, hãy kích hoạt trạng thái cho nó
+            if(typeof musicBtn !== 'undefined') {
+                musicBtn.classList.remove('hidden');
+                musicBtn.classList.add('playing-music');
+            }
+        }, 500);
+    }
+
     // ============================================================
     // 2. XỬ LÝ RESIZE
     // ============================================================
@@ -47,13 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let originalParent = null; 
 
     initPuzzle();
-    
-    document.body.addEventListener('click', () => {
-        if(audioMain.paused) {
-            audioMain.volume = 0.5;
-            audioMain.play().catch(()=>{});
-        }
-    }, { once: true });
 
     function initPuzzle() {
         for(let r=0; r<n; r++) {
@@ -262,7 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const mouse = { x: -100, y: -100 };
     const minDist = 150; 
     const imgBase = new Image();
-    imgBase.src = './images/snowflake.png';
+    imgBase.src = './images/blossom.png';
 
     let imgLixi = null;
     let transitionProgress = 0; 
@@ -321,7 +374,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ============================================================
-    // 5. XỬ LÝ SỰ KIỆN: ĐÓNG/MỞ THIỆP & HỘP QUÀ
+    // 5. ĐÓNG/MỞ THIỆP & HỘP QUÀ
     // ============================================================
     
     // --- Hàm này chỉ dùng khi click ra ngoài vùng thiệp (thoát hẳn) ---
@@ -376,30 +429,94 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    // --- PHÁO HOA ---
-    let fwParticles = []; let isFireworksRunning = false;
-    function startContinuousFireworks() { if (isFireworksRunning) return; isFireworksRunning = true; animateFireworks(); }
+    // ============================================================
+    // --- PHÁO HOA NÂNG CẤP (COPY ĐÈ LÊN ĐOẠN CŨ) ---
+    // ============================================================
+    let fwParticles = []; 
+    let isFireworksRunning = false;
+    
+    function startContinuousFireworks() { 
+        if (isFireworksRunning) return; 
+        isFireworksRunning = true; 
+        animateFireworks(); 
+    }
+
     function createExplosion(x, y) {
-        const colors = ['#ff0044', '#ffdd00', '#00ffcc', '#ff00ff', '#00ff00', '#ffffff'];
+        // Thêm nhiều màu rực rỡ hơn (Neon, Vàng kim, Cam lửa...)
+        const colors = ['#ff0044', '#ffdd00', '#00ffcc', '#ff00ff', '#00ff00', '#ffffff', '#FFD700', '#FF4500', '#00BFFF'];
         const color = colors[Math.floor(Math.random() * colors.length)];
-        for (let i = 0; i < 80; i++) {
-            const angle = (Math.PI * 2) / 80 * i; const speed = Math.random() * 2 + 1; 
-            fwParticles.push({ x: x, y: y, color: color, velocity: { x: Math.cos(angle) * speed * Math.random(), y: Math.sin(angle) * speed * Math.random() }, alpha: 1, friction: 0.96, gravity: 0.03, life: 150 });
+        
+        // Tăng số lượng hạt từ 80 -> 120 để dày hơn
+        const particleCount = 120; 
+        
+        for (let i = 0; i < particleCount; i++) {
+            const angle = (Math.PI * 2) / particleCount * i;
+            // Tốc độ nổ mạnh hơn (random từ 2 đến 6)
+            const speed = Math.random() * 4 + 2; 
+            
+            fwParticles.push({ 
+                x: x, 
+                y: y, 
+                color: color, 
+                // Tính toán vận tốc theo góc
+                velocity: { 
+                    x: Math.cos(angle) * speed * Math.random(), 
+                    y: Math.sin(angle) * speed * Math.random() 
+                }, 
+                alpha: 1, 
+                friction: 0.96, // Lực cản không khí (càng nhỏ càng nhanh dừng)
+                gravity: 0.04,  // Trọng lực (kéo hạt rơi xuống)
+                decay: Math.random() * 0.015 + 0.005, // Tốc độ mờ đi ngẫu nhiên
+                size: Math.random() * 2 + 1 // Kích thước hạt ngẫu nhiên
+            });
         }
     }
+
     function animateFireworks() {
-        ctxFw.globalCompositeOperation = 'destination-out'; ctxFw.fillStyle = 'rgba(0, 0, 0, 0.1)'; ctxFw.fillRect(0, 0, width, height); ctxFw.globalCompositeOperation = 'source-over';
-        if (Math.random() < 0.03) createExplosion(Math.random() * width, Math.random() * (height * 0.6));
+        // Tạo hiệu ứng đuôi mờ (Trail effect)
+        // Thay đổi 0.1 thành 0.2 nếu muốn đuôi ngắn hơn, sạch hơn
+        ctxFw.globalCompositeOperation = 'destination-out'; 
+        ctxFw.fillStyle = 'rgba(0, 0, 0, 0.15)'; 
+        ctxFw.fillRect(0, 0, width, height); 
+        ctxFw.globalCompositeOperation = 'source-over';
+
+        // Tăng tần suất bắn pháo hoa: 0.03 -> 0.05 (Nhiều pháo hơn)
+        if (Math.random() < 0.05) {
+            createExplosion(Math.random() * width, Math.random() * (height * 0.7));
+        }
+
         fwParticles.forEach((p, index) => {
-            p.velocity.x *= p.friction; p.velocity.y *= p.friction; p.velocity.y += p.gravity; p.x += p.velocity.x; p.y += p.velocity.y; p.alpha -= 0.01;
-            if (p.alpha <= 0) fwParticles.splice(index, 1);
-            else { ctxFw.save(); ctxFw.globalAlpha = p.alpha; ctxFw.shadowBlur = 10; ctxFw.shadowColor = p.color; ctxFw.fillStyle = p.color; ctxFw.beginPath(); ctxFw.arc(p.x, p.y, 2, 0, Math.PI * 2); ctxFw.fill(); ctxFw.restore(); }
+            // Cập nhật vật lý
+            p.velocity.x *= p.friction; 
+            p.velocity.y *= p.friction; 
+            p.velocity.y += p.gravity; // Hạt rơi xuống
+            p.x += p.velocity.x; 
+            p.y += p.velocity.y; 
+            p.alpha -= p.decay; // Mờ dần theo thời gian
+
+            if (p.alpha <= 0) { 
+                fwParticles.splice(index, 1); // Xóa hạt khi tắt hẳn
+            } else { 
+                ctxFw.save(); 
+                ctxFw.globalAlpha = p.alpha; 
+                
+                // Hiệu ứng phát sáng (Glow)
+                ctxFw.shadowBlur = 10; 
+                ctxFw.shadowColor = p.color; 
+                
+                ctxFw.fillStyle = p.color; 
+                ctxFw.beginPath(); 
+                ctxFw.arc(p.x, p.y, p.size, 0, Math.PI * 2); 
+                ctxFw.fill(); 
+                ctxFw.restore(); 
+            }
         });
+
         if (isFireworksRunning) requestAnimationFrame(animateFireworks);
     }
 
     // ============================================================
-    // 7. TÍNH NĂNG QUÀ ẨN (DOUBLE CLICK TRÁI TIM)
+    // 7. DOUBLE CLICK TRÁI TIM)
     // ============================================================
     const heartBtn = document.getElementById('heart');
     const hiddenPopup = document.getElementById('hidden-gift-popup');
@@ -408,19 +525,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Danh sách quà "bựa" hoặc đặc biệt hơn lì xì thường
     const secretGifts = [
-        "Một cái ôm thắm thiết❤️",
-        "Phiếu Bé Ngoan trọn đời!",
-        "🤡Chúc may mắn lần sau!",
+        "Một cái ôm thắm thiết!",
+        "Phiếu bé ngoan trọn đời!",
         "1 chuyến du lịch qua màn ảnh nhỏ",
         "Tình yêu siêu to khổng lồ!",
-        "999 đóa hồng🌹🌹🌹",
-        "Một cái ôm ấm áp!"
     ];
 
-    // Sự kiện Click đúp (dblclick)
     heartBtn.addEventListener('dblclick', (e) => {
-        e.stopPropagation(); // Ngăn sự kiện lan ra làm đóng thiệp
-        e.preventDefault();  // Ngăn bôi đen trúng tim
+        e.stopPropagation(); 
+        e.preventDefault();  
         
         // Random quà
         const randomGift = secretGifts[Math.floor(Math.random() * secretGifts.length)];
@@ -429,7 +542,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // Hiện popup quà ẩn
         hiddenPopup.classList.remove('hidden');
         
-        // Hiệu ứng pháo hoa chúc mừng thêm lần nữa
         startContinuousFireworks();
     });
 
@@ -443,6 +555,30 @@ document.addEventListener("DOMContentLoaded", function () {
     hiddenPopup.addEventListener('click', (e) => {
         if (e.target === hiddenPopup) {
             hiddenPopup.classList.add('hidden');
+        }
+    });
+
+    // ============================================================
+    // 8. NÚT BẬT/TẮT ÂM THANH
+    // ============================================================
+    const musicBtn = document.getElementById('music-control');
+    const musicIcon = musicBtn.querySelector('i');
+
+    // Sự kiện: Khi nhạc THỰC SỰ bắt đầu chạy thì mới hiện nút
+    audioMain.onplay = function() {
+        musicBtn.classList.remove('hidden'); // Hiện nút
+    };
+
+    // Xử lý click vào nút
+    musicBtn.addEventListener('click', function(e) {
+        e.stopPropagation(); // Ngăn không cho click xuyên qua làm đóng thiệp
+        
+        if (audioMain.paused) {
+            audioMain.play();
+            musicIcon.className = 'fas fa-volume-up'; // Icon loa bật
+        } else {
+            audioMain.pause();
+            musicIcon.className = 'fas fa-volume-mute'; // Icon loa tắt
         }
     });
 
