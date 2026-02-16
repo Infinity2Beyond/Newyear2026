@@ -1,13 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // ============================================================
     // 0. INTRO
-    // ============================================================
     const introScreen = document.getElementById('intro-screen');
     const startBtn = document.getElementById('start-btn');
     const nameInput = document.getElementById('username-input');
     
-    // Các phần tử cần thay thế tên
-    // Dựa trên file index.html của bạn
     const wishText = document.querySelector('.card-wish'); 
     const giftTitle = document.querySelector('#gift-screen h2');
     const secretGiftText = document.querySelector('#hidden-gift-popup p'); 
@@ -16,17 +12,13 @@ document.addEventListener("DOMContentLoaded", function () {
         handleStart();
     });
 
-    // Cho phép ấn Enter để bắt đầu luôn
     nameInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleStart();
     });
 
     function handleStart() {
         let name = nameInput.value.trim();
-        if (!name) name = "Cậu"; // Nếu không nhập thì để mặc định là "Cậu"
-
-        // 1. Thay thế chữ "cậu" hoặc "Cậu" bằng tên người dùng
-        // Sử dụng innerHTML để giữ nguyên các thẻ html con (nếu có)
+        if (!name) name = "Cậu"; 
         
         if(wishText) wishText.innerHTML = wishText.innerHTML.replace(/cậu/gi, name);
         
@@ -36,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         document.title = `Chúc Mừng Năm Mới ${name} - 2026`;
 
-        // 2. Ẩn màn hình Intro và Hiện Game
+        // Ẩn Intro và Hiện Game
         introScreen.style.opacity = 0;
         setTimeout(() => {
             introScreen.style.display = 'none';
@@ -44,9 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 500);
     }
     
-    // ============================================================
-    // 1. KHỞI TẠO CÁC BIẾN & ELEMENT
-    // ============================================================
+    // 1. KHỞI TẠO BIẾN
     const modal = document.querySelector('.js-modal');
     const btnOpenCard = document.querySelector('.open');
     const btnCloseCard = document.querySelector('.close');
@@ -66,9 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let width, height;
 
-    // ============================================================
     // 2. XỬ LÝ RESIZE
-    // ============================================================
     function resizeAllCanvas() {
         width = window.innerWidth;
         height = window.innerHeight;
@@ -78,9 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener('resize', resizeAllCanvas);
     resizeAllCanvas();
 
-    // ============================================================
-    // 3. LOGIC MINIGAME (PHƯƠNG PHÁP BOUNDING BOX - FIX TRIỆT ĐỂ)
-    // ============================================================
+    // 3. LOGIC MINIGAME (
     const n = 3; 
     const gridSizePx = 300;
     const root = document.documentElement;
@@ -139,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function setupPieceEvents(piece) {
-        // --- DESKTOP ---
+        // DESKTOP
         piece.addEventListener('dragstart', () => {
             if(piece.classList.contains('placed')) return;
             draggedPiece = piece;
@@ -150,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
             piece.classList.remove('hidden');
         });
 
-        // --- MOBILE (TOUCH) ---
+        // MOBILE (TOUCH)
         piece.addEventListener('touchstart', (e) => {
             if(piece.classList.contains('placed')) return;
             if(e.cancelable) e.preventDefault();
@@ -254,6 +240,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function checkWin() {
         const placed = document.querySelectorAll('.puzzle-piece.placed').length;
         if(placed === n*n) {
+            audioMain.volume = 1.0;
+            if(audioMain.paused) audioMain.play().catch(()=>{});
             setTimeout(() => {
                 gameScreen.classList.add('hidden'); 
                 giftScreen.classList.remove('hidden'); 
@@ -262,18 +250,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    let isTyping = false; // Cờ kiểm tra để không gõ lại nhiều lần
+    let isTyping = false; // Flag check
 
     function typeWriter() {
         const element = document.getElementById('poem');
-        if (!element || isTyping) return; // Nếu đang gõ hoặc gõ rồi thì thôi
+        if (!element || isTyping) return; 
         
         isTyping = true;
         const text = element.getAttribute('data-text');
-        element.innerHTML = ""; // Xóa sạch trước khi gõ
+        element.innerHTML = ""; 
         
         let i = 0;
-        const speed = 50; // Tốc độ gõ (càng nhỏ càng nhanh)
+        const speed = 50; 
 
         function typing() {
             if (i < text.length) {
@@ -292,9 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // ============================================================
-    // 4. LOGIC HIỆU ỨNG NỀN & SỰ KIỆN
-    // ============================================================
+    // 4. LOGIC EVENT
     const objects = [];
     const objectsCount = 100; 
     const mouse = { x: -100, y: -100 };
@@ -309,16 +295,16 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener('mousemove', function(e) { mouse.x = e.clientX; mouse.y = e.clientY; });
     window.addEventListener('mouseleave', function() { mouse.x = -100; mouse.y = -100; });
 
-    // 1. Khi ngón tay di chuyển trên màn hình
+    // Khi ngón tay di chuyển trên màn hình
     window.addEventListener('touchmove', function(e) {
-        // e.touches[0] là ngón tay đầu tiên chạm vào
+        // e.touches[0] là ngón tay đầu tiên
         if (e.touches.length > 0) {
             mouse.x = e.touches[0].clientX;
             mouse.y = e.touches[0].clientY;
         }
-    }, { passive: true }); // passive: true giúp cuộn trang mượt hơn
+    }, { passive: true }); 
 
-    // 2. Khi ngón tay vừa chạm vào màn hình
+    // Khi ngón tay vừa chạm vào màn hình
     window.addEventListener('touchstart', function(e) {
         if (e.touches.length > 0) {
             mouse.x = e.touches[0].clientX;
@@ -326,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }, { passive: true });
 
-    // 3. Khi nhấc ngón tay ra (Reset tọa độ để hiệu ứng dừng lại)
+    // Khi nhấc ngón tay ra
     window.addEventListener('touchend', function() {
         mouse.x = -100;
         mouse.y = -100;
@@ -381,53 +367,42 @@ document.addEventListener("DOMContentLoaded", function () {
     imgBase.onload = () => { drawBackground(); };
 
 
-    // ============================================================
-    // 5. ĐÓNG/MỞ THIỆP & HỘP QUÀ
-    // ============================================================
-    
-    // --- Hàm này chỉ dùng khi click ra ngoài vùng thiệp (thoát hẳn) ---
+    // 5. ĐÓNG/MỞ THIỆP & HỘP QUÀ   
     function closeCardAndShowGift() {
         cardPkg.classList.remove('is-open');
-        // Đợi 1s cho animation đóng thiệp rồi mới ẩn modal
         setTimeout(() => {
             modal.classList.remove('open');
-            // Hiện lại lớp Game/Quà
             gameLayer.style.display = 'flex'; 
             setTimeout(() => { gameLayer.style.opacity = '1'; }, 10);
         }, 1000); 
     }
 
-    // --- Khi click Lì xì -> Mở thiệp ---
+    // Click Lì xì -> Mở thiệp
     lixiTrigger.addEventListener('click', (e) => {
         e.stopPropagation();
         gameLayer.style.opacity = '0';
         setTimeout(() => {
             gameLayer.style.display = 'none';
             modal.classList.add('open');
-            // setTimeout(typeWriter, 500)
-            audioMain.volume = 1.0;
-            if(audioMain.paused) audioMain.play().catch(()=>{});
+            // audioMain.volume = 1.0;
+            // if(audioMain.paused) audioMain.play().catch(()=>{});
             imgLixi = new Image(); imgLixi.src = './images/lixi.png'; isTransforming = true; 
             startContinuousFireworks();
         }, 500);
     });
 
-    // --- CLICK RA NGOÀI VÙNG XÁM -> THOÁT RA HỘP QUÀ ---
     modal.addEventListener('click', (e) => {
         if (e.target === modal || e.target.classList.contains('modal-container')) { 
             closeCardAndShowGift(); 
         }
     });
 
-    // --- CLICK NÚT X (SỬA LẠI: CHỈ ĐÓNG NẮP THIỆP) ---
     btnCloseCard.addEventListener('click', (e) => { 
         e.preventDefault(); 
         e.stopPropagation(); 
-        // Chỉ gập thiệp lại (không gọi hàm closeCardAndShowGift để tránh biến mất modal)
         cardPkg.classList.remove('is-open'); 
     });
 
-    // --- Nút Mở (Con dấu) ---
     btnOpenCard.addEventListener('click', (e) => { 
         e.preventDefault(); 
         e.stopPropagation(); 
@@ -437,9 +412,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    // ============================================================
-    // --- PHÁO HOA NÂNG CẤP (COPY ĐÈ LÊN ĐOẠN CŨ) ---
-    // ============================================================
+    // PHÁO HOA
     let fwParticles = []; 
     let isFireworksRunning = false;
     
@@ -450,65 +423,56 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function createExplosion(x, y) {
-        // Thêm nhiều màu rực rỡ hơn (Neon, Vàng kim, Cam lửa...)
         const colors = ['#ff0044', '#ffdd00', '#00ffcc', '#ff00ff', '#00ff00', '#ffffff', '#FFD700', '#FF4500', '#00BFFF'];
         const color = colors[Math.floor(Math.random() * colors.length)];
         
-        // Tăng số lượng hạt từ 80 -> 120 để dày hơn
         const particleCount = 120; 
         
         for (let i = 0; i < particleCount; i++) {
             const angle = (Math.PI * 2) / particleCount * i;
-            // Tốc độ nổ mạnh hơn (random từ 2 đến 6)
             const speed = Math.random() * 4 + 2; 
             
             fwParticles.push({ 
                 x: x, 
                 y: y, 
                 color: color, 
-                // Tính toán vận tốc theo góc
                 velocity: { 
                     x: Math.cos(angle) * speed * Math.random(), 
                     y: Math.sin(angle) * speed * Math.random() 
                 }, 
                 alpha: 1, 
-                friction: 0.96, // Lực cản không khí (càng nhỏ càng nhanh dừng)
-                gravity: 0.04,  // Trọng lực (kéo hạt rơi xuống)
-                decay: Math.random() * 0.015 + 0.005, // Tốc độ mờ đi ngẫu nhiên
-                size: Math.random() * 2 + 1 // Kích thước hạt ngẫu nhiên
+                friction: 0.96, 
+                gravity: 0.04, 
+                decay: Math.random() * 0.015 + 0.005, 
+                size: Math.random() * 2 + 1 
             });
         }
     }
 
     function animateFireworks() {
-        // Tạo hiệu ứng đuôi mờ (Trail effect)
-        // Thay đổi 0.1 thành 0.2 nếu muốn đuôi ngắn hơn, sạch hơn
         ctxFw.globalCompositeOperation = 'destination-out'; 
         ctxFw.fillStyle = 'rgba(0, 0, 0, 0.15)'; 
         ctxFw.fillRect(0, 0, width, height); 
         ctxFw.globalCompositeOperation = 'source-over';
 
-        // Tăng tần suất bắn pháo hoa: 0.03 -> 0.05 (Nhiều pháo hơn)
         if (Math.random() < 0.05) {
             createExplosion(Math.random() * width, Math.random() * (height * 0.7));
         }
 
         fwParticles.forEach((p, index) => {
-            // Cập nhật vật lý
             p.velocity.x *= p.friction; 
             p.velocity.y *= p.friction; 
-            p.velocity.y += p.gravity; // Hạt rơi xuống
+            p.velocity.y += p.gravity; 
             p.x += p.velocity.x; 
             p.y += p.velocity.y; 
-            p.alpha -= p.decay; // Mờ dần theo thời gian
+            p.alpha -= p.decay; 
 
             if (p.alpha <= 0) { 
-                fwParticles.splice(index, 1); // Xóa hạt khi tắt hẳn
+                fwParticles.splice(index, 1); 
             } else { 
                 ctxFw.save(); 
                 ctxFw.globalAlpha = p.alpha; 
                 
-                // Hiệu ứng phát sáng (Glow)
                 ctxFw.shadowBlur = 10; 
                 ctxFw.shadowColor = p.color; 
                 
@@ -523,15 +487,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isFireworksRunning) requestAnimationFrame(animateFireworks);
     }
 
-    // ============================================================
-    // 7. DOUBLE CLICK TRÁI TIM)
-    // ============================================================
+   
+    // 7. HEART
     const heartBtn = document.getElementById('heart');
     const hiddenPopup = document.getElementById('hidden-gift-popup');
     const giftResult = document.getElementById('gift-result');
     const closeGiftBtn = document.getElementById('close-gift-btn');
 
-    // Danh sách quà "bựa" hoặc đặc biệt hơn lì xì thường
     const secretGifts = [
         "Một cái ôm thắm thiết!",
         "Phiếu bé ngoan trọn đời!",
@@ -543,36 +505,29 @@ document.addEventListener("DOMContentLoaded", function () {
         e.stopPropagation(); 
         e.preventDefault();  
         
-        // Random quà
         const randomGift = secretGifts[Math.floor(Math.random() * secretGifts.length)];
         giftResult.innerText = randomGift;
         
-        // Hiện popup quà ẩn
         hiddenPopup.classList.remove('hidden');
         
         startContinuousFireworks();
     });
 
-    // Đóng popup quà ẩn
     closeGiftBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         hiddenPopup.classList.add('hidden');
     });
 
-    // Click ra ngoài popup cũng đóng
     hiddenPopup.addEventListener('click', (e) => {
         if (e.target === hiddenPopup) {
             hiddenPopup.classList.add('hidden');
         }
     });
 
-    // ============================================================
     // 8. NÚT BẬT/TẮT ÂM THANH
-    // ============================================================
     const musicBtn = document.getElementById('music-control');
     const musicIcon = musicBtn.querySelector('i');
 
-    // Sự kiện: Khi nhạc THỰC SỰ bắt đầu chạy thì mới hiện nút
     audioMain.onplay = function() {
         musicBtn.classList.remove('hidden'); // Hiện nút
     };

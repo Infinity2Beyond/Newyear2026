@@ -3,11 +3,11 @@
     --primary-gold: #f1c40f;
     --text-color: #081938;
     
-    /* --- CẤU HÌNH GAME PUZZLE --- */
-    --n: 3; /* Số ô 3x3 */
+    /* --- PUZZLE --- */
+    --n: 3; /* Số ô*/
     --grid-size: 300px;
     --piece-size: calc(var(--grid-size) / var(--n));
-    --bg-image: url('./images/puzzle.jpg'); 
+    --bg-image: url('./images/puzzle.webp'); 
     --gap: 2px;
 }
 
@@ -19,15 +19,13 @@ body {
     background-color: #000;
 }
 
-/* ==========================================================================
-   1. BACKGROUND & CANVAS
-   ========================================================================== */
+/* 1. BACKGROUND & CANVAS */
 #canvas {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     z-index: 1;
     background-size: cover;
     background-position: center;
-    background-image: url('./images/newyearbig.jpg'); /* Ảnh nền gốc của bạn */
+    background-image: url('./images/newyearbig.jpg'); 
 }
 
 #fireworks {
@@ -35,10 +33,7 @@ body {
     z-index: 9999; pointer-events: none;
 }
 
-/* ==========================================================================
-   2. GAME LAYER (MINIGAME & HỘP QUÀ)
-   ========================================================================== */
-/* Layer này nằm trên background nhưng dưới Modal thiệp */
+/* 2. GAME LAYER */
 #game-layer {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: 50; 
@@ -48,18 +43,18 @@ body {
 
 .screen {
     position: absolute; width: 100%; height: 100%;
-    background: transparent; /* Trong suốt để thấy nền Tết */
+    background: transparent; 
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     transition: opacity 0.5s ease-in-out;
 }
 .hidden { display: none !important; }
 
-/* --- STYLE TRÒ CHƠI XẾP HÌNH --- */
+/* --- STYLE PUZZLE --- */
 .game-title {
     color: var(--primary-gold); 
     font-size: 32px; margin-bottom: 20px;
     text-shadow: 2px 2px 4px #d60000;
-    background: rgba(0,0,0,0.5); /* Nền đen mờ giúp chữ nổi bật trên ảnh nền */
+    background: rgba(0,0,0,0.5); 
     padding: 10px 25px; border-radius: 50px;
     font-family: 'Pacifico', cursive;
 }
@@ -77,14 +72,12 @@ body {
     width: var(--grid-size); 
     height: var(--grid-size);
     
-    /* [QUAN TRỌNG 1] Bỏ khe hở để ảnh liền mạch */
     gap: 1px; 
 
     border: 5px solid #fff; 
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
     background: #fff;
 
-    /* [QUAN TRỌNG 2] Đảm bảo lòng trong của khung đủ 300px */
     box-sizing: content-box; 
 }
 .puzzle-dropzone { width: 100%; height: 100%; background: rgba(0,0,0,0.1); }
@@ -97,10 +90,8 @@ body {
     touch-action: none;
     -webkit-touch-callout: none;
     
-    /* Bỏ bo góc hoặc giảm xuống để ghép cho khít */
     border-radius: 0; 
     
-    /* Thêm viền mờ cực nhẹ để dễ nhìn thấy ranh giới lúc đang xếp (tùy chọn) */
     box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2); 
 }
 
@@ -115,7 +106,7 @@ body {
     overflow-y: auto; 
 }
 
-/* --- STYLE HỘP QUÀ CSS --- */
+/* --- STYLE HỘP QUÀ --- */
 .boxgift-container {
     display: flex; justify-content: center; align-items: center;
     position: relative; margin-top: 50px;
@@ -149,7 +140,7 @@ body {
 .box-bowtie::before { left: 50%; transform: translateX(-100%) skew(10deg, 10deg); }
 .box-bowtie::after { left: 50%; transform: translateX(0%) rotate(90deg) skew(10deg, 10deg); }
 
-/* Ảnh Lì Xì (Ẩn trong hộp) */
+/* Ảnh Lì Xì */
 .img-lixi {
     position: absolute;
     width: 80px;
@@ -202,9 +193,7 @@ body {
 }
 
 
-/* ==========================================================================
-   3. MODAL (LỚP PHỦ ĐEN KHI MỞ THIỆP)
-   ========================================================================== */
+/* 3. MODAL (LỚP PHỦ ĐEN KHI MỞ THIỆP) */
 .modal {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.7); display: none;
@@ -217,12 +206,10 @@ body {
 .modal-container {
     position: relative; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
-    pointer-events: none; /* Click xuyên qua vùng trống */
+    pointer-events: none;
 }
 
-/* ==========================================================================
-   4. THIẾT KẾ THIỆP 3D (GIỮ NGUYÊN CODE CỦA BẠN)
-   ========================================================================== */
+/* 4. THIẾT KẾ THIỆP 3D */
 .card {
     perspective: 1500px; width: 400px; height: 650px;
     position: relative; z-index: 200; pointer-events: auto;
@@ -263,10 +250,10 @@ body {
     font-weight: bold; margin-top: 20px;
 }
 
-/* CÁNH CỬA */
+/* CÁNH thiệp */
 .card--first, .card--third {
     position: absolute; top: 0;
-    width: 50.5%; /* Chồng nhẹ lên nhau để kín khe */
+    width: 50.5%; 
     height: 100%;
     transform-style: preserve-3d; transition: transform 1s ease-in-out;
     background-color: #fff;
@@ -309,7 +296,7 @@ body {
 .card-packaging.is-open .card--first { transform: rotateY(-180deg); }
 .card-packaging.is-open .card--third { transform: rotateY(180deg); }
 
-/* NÚT MỞ (CON DẤU) */
+/* NÚT MỞ */
 .card .open {
     position: absolute; top: 50%; right: -60px; 
     transform: translateY(-50%) translateZ(2px); z-index: 100;
@@ -358,23 +345,23 @@ body {
 @keyframes blink { 50% { opacity: 0.5; } }
 
 #poem {
-    white-space: pre-line; /* Để hiểu ký tự xuống dòng */
-    min-height: 150px;     /* Quan trọng: Giữ khung cố định để thiệp không bị co giật */
+    white-space: pre-line; 
+    min-height: 150px;     
     display: block;
 }
 
-/* --- POPUP QUÀ BÍ MẬT (Hidden Gift) --- */
+/* --- POPUP QUÀ --- */
 #hidden-gift-popup {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 99999; /* Đảm bảo nằm trên cùng, cao hơn cả thiệp */
+    z-index: 99999; 
     display: flex; justify-content: center; align-items: center;
     background: rgba(0, 0, 0, 0.85);
     animation: fadeIn 0.3s;
 }
 
 .gift-content {
-    background: #fff url('./images/red.jpg'); /* Dùng nền giống thiệp cho đồng bộ */
+    background: #fff url('./images/red.jpg'); 
     background-size: cover;
     padding: 40px;
     border-radius: 20px;
@@ -434,10 +421,10 @@ body {
 #music-control {
     position: fixed;
     top: 20px;
-    left: 20px; /* Để góc trái để tránh đụng nút đóng/mở thiệp bên phải */
-    z-index: 99999; /* Đảm bảo luôn nằm trên cùng */
+    left: 20px;
+    z-index: 99999; 
     cursor: pointer;
-    color: #fff; /* Màu trắng cho nổi trên nền tối */
+    color: #fff; 
     font-size: 24px;
     width: 50px;
     height: 50px;
@@ -446,13 +433,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.3); /* Nền đen mờ */
+    background: rgba(0, 0, 0, 0.3); 
     transition: all 0.3s ease;
     animation: fadeIn 1s ease;
 }
 
 #music-control:hover {
-    background: rgba(214, 0, 0, 0.8); /* Màu đỏ khi di chuột vào */
+    background: rgba(214, 0, 0, 0.8); 
     border-color: #f1c40f;
 }
 
@@ -462,15 +449,15 @@ body {
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
 }
 
-/* --- MÀN HÌNH NHẬP TÊN (INTRO) --- */
+/* --- INTRO --- */
 .intro-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: #000 url('./images/newyearbig.jpg') center/cover no-repeat; /* Dùng chung nền với game */
-    z-index: 999999; /* Đảm bảo nằm trên cùng */
+    background: #000 url('./images/newyearbig.jpg') center/cover no-repeat;
+    z-index: 999999;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -536,68 +523,60 @@ body {
     to { transform: scale(1); opacity: 1; }
 }
 
-/* Ẩn Game Layer ban đầu để chờ nhập tên */
 #game-layer {
     display: none; /* Sẽ được hiện lại bằng JS */
 }
 
 
-/* ==========================================================================
-   5. RESPONSIVE
-   ========================================================================== */
+/* 5. RESPONSIVE */
 @media (max-width: 768px) {
     :root { --grid-size: 300px; }
     
-    /* Game xếp hình */
+    /* Puzzle */
     .game-area { flex-direction: column; gap: 15px; }
     .side-container { width: 300px; height: 70px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; }
     .game-title { font-size: 24px; padding: 8px 20px; }
-
-    /* --- CẤU HÌNH THIỆP CHO MOBILE --- */
+    /* THIỆP */
     .card { 
-        width: 90vw;       /* Chiếm 90% chiều ngang màn hình */
-        height: 75vh;      /* Tăng chiều cao lên để chứa chữ to */
+        width: 90vw;       
+        height: 75vh;      
         max-height: 650px; 
     }
 
     .card-center { 
-        padding: 10px 5px; /* Giảm lề để nhường chỗ cho chữ */
+        padding: 10px 5px; 
     }
 
-    /* 1. Tiêu đề "Xuân Bính Ngọ" to hơn */
     .card-title { 
-        font-size: 36px;  /* Tăng từ 28px lên 36px */
+        font-size: 36px; 
         margin-bottom: 10px;
     } 
 
-    /* 2. Bài thơ to rõ ràng */
     .card-poem { 
-        font-size: 20px;  /* Tăng từ 15px lên 20px (Rất dễ đọc) */
-        line-height: 1.5; /* Giãn dòng thoáng hơn */
+        font-size: 20px;  
+        line-height: 1.5; 
         white-space: normal; 
         min-height: 140px; 
     }
     
-    /* 3. Lời chúc to hơn */
     .card-wish {
-        font-size: 18px;  /* Tăng từ 14px lên 18px */
+        font-size: 18px;  
         margin-top: 15px;
     }
 
-    /* Các thành phần khác thu nhỏ cho cân đối */
     #heart { width: 50px; height: 50px; margin: 15px auto 0; }
     #heart::before, #heart::after { width: 25px; height: 40px; border-radius: 25px 25px 0 0; }
     #heart::before { left: 25px; }
     
    .card .open { 
-        right: -70px; /* Đẩy ra xa hơn chút để không che thiệp */
+        right: -70px; 
     }
     .card .open-main { 
-        width: 140px;  /* Tăng từ 70px lên 140px */
-        height: 140px; /* Tăng từ 70px lên 140px */
-    } /* Nút mở nhỏ lại xíu để ko che chữ */
+        width: 140px;  
+        height: 140px; 
+    } 
     .card .open-title {
-        font-size: 24px; /* Tăng cỡ chữ nút Mở cho cân đối */
+        font-size: 24px; 
     }
     
     .boxgift-container { transform: scale(0.8); margin-top: 20px; }
