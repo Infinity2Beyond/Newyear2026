@@ -497,8 +497,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const secretGifts = [
         "Một cái ôm thắm thiết!",
         "Phiếu bé ngoan trọn đời!",
-        "1 chuyến du lịch qua màn ảnh nhỏ!",
+        "1 chuyến du lịch trong mơ!",
         "Một tình yêu siêu to khổng lồ!",
+        "Sức khỏe dồi dào, cả năm không ốm!",
+        "Sự nghiệp thăng tiến vù vù!",
+        "Vé ngủ nướng không bị ai gọi dậy!"
     ];
 
     heartBtn.addEventListener('dblclick', (e) => {
@@ -529,19 +532,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const musicIcon = musicBtn.querySelector('i');
 
     audioMain.onplay = function() {
-        musicBtn.classList.remove('hidden'); // Hiện nút
+        musicBtn.classList.remove('hidden');stopPropagation
     };
 
-    // Xử lý click vào nút
     musicBtn.addEventListener('click', function(e) {
-        e.stopPropagation(); // Ngăn không cho click xuyên qua làm đóng thiệp
+        e.stopPropagation(); 
         
         if (audioMain.paused) {
             audioMain.play();
-            musicIcon.className = 'fas fa-volume-up'; // Icon loa bật
+            musicIcon.className = 'fas fa-volume-up'; 
         } else {
             audioMain.pause();
-            musicIcon.className = 'fas fa-volume-mute'; // Icon loa tắt
+            musicIcon.className = 'fas fa-volume-mute'; 
         }
     });
 
