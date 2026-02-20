@@ -526,7 +526,6 @@ document.addEventListener("DOMContentLoaded", function () {
             hiddenPopup.classList.add('hidden');
         }
     });
-
     // 8. NÚT BẬT/TẮT ÂM THANH
     const musicBtn = document.getElementById('music-control');
     const musicIcon = musicBtn.querySelector('i');
